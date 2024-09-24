@@ -6,6 +6,8 @@ using CM.Core.Entities;
 using CM.Core.Models.FilterModels;
 using CM.Core.Models.InputModels;
 using CM.Core.Models.ViewModels;
+using CM.WebAPI.Helpers;
+using X.PagedList;
 
 namespace CM.WebAPI.Controllers
 {
@@ -70,15 +72,16 @@ namespace CM.WebAPI.Controllers
         {
             var customPagedList = _contactService.GetFilterable(filter);
 
-            //var pagedList = _mapper.Map<IPagedList<Contact>, ICustomPagedList<ContactViewModel>>((IPagedList<Contact>)customPagedList);
+            var pagedList = _mapper.Map<IPagedList<Contact>, ICustomPagedList<ContactViewModel>>((IPagedList<Contact>)customPagedList);
 
-            //return Ok(pagedList);
-            return Ok();
+            return Ok(pagedList);
+           
         }
 
         public override void Dispose()
         {
-            throw new NotImplementedException();
+            _contactService.Dispose();
+            
         }
     }
 }

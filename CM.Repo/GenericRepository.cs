@@ -18,39 +18,39 @@ namespace CM.Repo
             this.context = context;
         }
 
-        public Task<T> GetById(long id)
+        public T GetById(long id)
         {
-            throw new NotImplementedException();
+            return context.Set<T>().Find(id);
         }
 
-        public Task<IEnumerable<T>> GetAll()
+        public IEnumerable<T> GetAll()
         {
-            throw new NotImplementedException();
+            return context.Set<T>().Where(e => e.Active == true).ToList();
         }
 
         public void Add(T entity)
         {
-            throw new NotImplementedException();
+            context.Set<T>().Add(entity);
         }
 
         public void AddRange(IEnumerable<T> entities)
         {
-            throw new NotImplementedException();
+            context.Set<T>().AddRange(entities);
         }
 
-        public Task<T> Update(T entity)
+        public T Update(T entity)
         {
-            throw new NotImplementedException();
+            return context.Set<T>().Update(entity).Entity;
         }
 
         public void Remove(T entity)
         {
-            throw new NotImplementedException();
+            context.Set<T>().Remove(entity);
         }
 
         public void RemoveRange(IEnumerable<T> entities)
         {
-            throw new NotImplementedException();
+            context.Set<T>().RemoveRange(entities);
         }
     }
 }

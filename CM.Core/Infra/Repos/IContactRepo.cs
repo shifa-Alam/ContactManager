@@ -11,6 +11,6 @@ namespace CM.Core.Infra.Repos
 {
     public interface IContactRepo : IGenericRepository<Contact>
     {
-        Task<IEnumerable<Contact>> GetFilterable(ContactFilterModel filter);
+        IEnumerable<Contact> GetFilterable(ContactFilterModel filter);
     }
 }

@@ -12,6 +12,6 @@ namespace CM.Core.Infra.Repos
         IContactGroupRepo ContactGroupRepo { get; }
         IContactTypeRepo ContactTypeRepo { get; }
 
-        Task<int>  Save();
+        int  Save();
     }
 }

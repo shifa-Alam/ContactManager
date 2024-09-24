@@ -2,6 +2,7 @@
 using CM.Core.Entities;
 using CM.Core.Models.InputModels;
 using CM.Core.Models.ViewModels;
+using X.PagedList;
 
 
 namespace CM.WebAPI.Helpers
@@ -20,6 +21,9 @@ namespace CM.WebAPI.Helpers
                 .ForMember(dest => dest.ContactGroupName, m => m.MapFrom(src => src.ContactGroup.Name));
             CreateMap<ContactType, ContactTypeViewModel>();
             CreateMap<ContactGroup, ContactGroupViewModel>();
+            CreateMap(typeof(PagedList<>), typeof(CustomPagedList<>)).ReverseMap().PreserveReferences();
+
+            CreateMap(typeof(IPagedList<>), typeof(ICustomPagedList<>)).PreserveReferences().ConvertUsing(typeof(PagedListConverter<,>));
 
         }
     }

@@ -9,11 +9,11 @@ namespace CM.Core.Infra.Repos
 {
     public interface IGenericRepository<T> where T : class
     {
-        Task<T> GetById(long id);
-        Task<IEnumerable<T>> GetAll();
+        T GetById(long id);
+        IEnumerable<T> GetAll();
         void Add(T entity);
         void AddRange(IEnumerable<T> entities);
-        Task<T> Update(T entity);
+        T Update(T entity);
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entities);
     }

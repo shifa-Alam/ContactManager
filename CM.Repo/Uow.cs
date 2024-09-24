@@ -23,9 +23,9 @@ namespace CM.Repo
         public IContactGroupRepo ContactGroupRepo { get; }
         public IContactTypeRepo ContactTypeRepo { get; }
 
-        public async Task<int> Save()
+        public  int Save()
         {
-            return await _context.SaveChangesAsync();
+            return  _context.SaveChanges();
         }
         public void Dispose()
         {

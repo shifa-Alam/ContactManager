@@ -10,8 +10,8 @@ namespace CM.Core.Entities
     {
         public string Name { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
-        public int ContactTypeId { get; set; }
-        public int ContactGroupId { get; set; }
+        public long ContactTypeId { get; set; }
+        public long ContactGroupId { get; set; }
 
         // Navigation property
         public ContactType ContactType { get; set; }
