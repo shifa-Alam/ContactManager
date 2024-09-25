@@ -12,7 +12,7 @@ using X.PagedList;
 namespace CM.WebAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    
     public class ContactController : BaseController
     {
         private readonly IContactService _contactService;
@@ -32,19 +32,25 @@ namespace CM.WebAPI.Controllers
         [Route("SaveContact")]
         public IActionResult SaveContact(ContactInputModel contactIn)
         {
+            try
+            {
+                var mappedData = _mapper.Map<Contact>(contactIn);
 
-            var mappedData = _mapper.Map<Contact>(contactIn);
-
-            _contactService.Save(mappedData);
-            return Ok();
+                _contactService.Save(mappedData);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+           
         }
         [HttpPut]
         [Route("UpdateContact")]
         public IActionResult UpdateContact(ContactInputModel contactIn)
         {
-
             var mappedData = _mapper.Map<Contact>(contactIn);
-
             _contactService.Update(mappedData);
             return Ok();
         }
@@ -89,23 +95,23 @@ namespace CM.WebAPI.Controllers
 
             for (int i = 1; i < 20; i++)
             {
-                var ContactGroup = new ContactGroup
+                var contactGroup = new ContactGroup
                 {
                     Name = "Group" + i,
                     CreatedDate = DateTime.Now
 
                 };
-                _contactGroupService.Save(ContactGroup);
+                _contactGroupService.Save(contactGroup);
 
 
 
-                var ContactType = new ContactType
+                var contactType = new ContactType
                 {
                     Name = "Type" + i,
                     CreatedDate = DateTime.Now
 
                 };
-                _contactTypeService.Save(ContactType);
+                _contactTypeService.Save(contactType);
 
 
             }

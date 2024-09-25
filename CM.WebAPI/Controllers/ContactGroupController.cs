@@ -13,7 +13,7 @@ using CM.bll.Services;
 namespace CM.WebAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    
     public class ContactGroupController : BaseController
     {
         

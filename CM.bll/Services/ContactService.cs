@@ -25,15 +25,24 @@ namespace CM.bll.Services
             {
                 entity.Active = true;
                 entity.CreatedDate = DateTime.Now;
+                ApplyValidation(entity);
                 _repo.ContactRepo.Add(entity);
                 _repo.Save();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                throw ;
             }
            
+        }
+
+        private void ApplyValidation(Contact entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            if (string.IsNullOrEmpty(entity.Name)) throw new Exception("Name is required");
+            if (string.IsNullOrEmpty(entity.PhoneNumber)) throw new Exception("Phone is required");
+            if (entity.ContactGroupId<=0) throw new Exception("Group is required");
+            if (entity.ContactTypeId<=0) throw new Exception("Type is required");
         }
 
         public void Update(Contact entity)

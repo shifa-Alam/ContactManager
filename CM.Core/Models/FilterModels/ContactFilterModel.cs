@@ -8,8 +8,8 @@ namespace CM.Core.Models.FilterModels
 {
     public class ContactFilterModel : BaseFilter
     {
-        public string Name { get; set; } = "";
-        public string PhoneNumber { get; set; } = "";
+        public string? Name { get; set; }
+        public string? PhoneNumber { get; set; }
         public int ContactTypeId { get; set; }
         public int ContactGroupId { get; set; } 
     }

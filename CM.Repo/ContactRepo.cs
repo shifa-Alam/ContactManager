@@ -22,8 +22,8 @@ namespace CM.Repo
             IQueryable<Contact> queryResult = context.Contacts.Include(c=>c.ContactGroup).Include(c=>c.ContactType);
 
             queryResult = queryResult.Where(e =>
-                (!string.IsNullOrEmpty(filter.Name) ? (e.Name.Contains(filter.Name)) : true)
-                && (!string.IsNullOrEmpty(filter.PhoneNumber) ? e.PhoneNumber.Contains(filter.PhoneNumber) : true) 
+                (!string.IsNullOrWhiteSpace(filter.Name) ? (e.Name.Contains(filter.Name)) : true)
+                && (!string.IsNullOrWhiteSpace(filter.PhoneNumber) ? e.PhoneNumber.Contains(filter.PhoneNumber) : true) 
                 && (filter.ContactTypeId>0? e.ContactTypeId==filter.ContactTypeId:true) 
                 && (filter.ContactGroupId>0? (e.ContactGroupId==filter.ContactGroupId):true) 
                 && e.Active == true);
