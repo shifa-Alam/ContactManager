@@ -16,12 +16,17 @@ namespace CM.WebAPI.Controllers
     public class ContactController : BaseController
     {
         private readonly IContactService _contactService;
+        private readonly IContactTypeService _contactTypeService;
+        private readonly IContactGroupService _contactGroupService;
         private readonly IMapper _mapper;
 
-        public ContactController(IContactService contactService, IMapper mapper)
+        public ContactController(IContactService contactService, IContactTypeService contactTypeService, IContactGroupService contactGroupService, IMapper mapper)
         {
             _contactService = contactService;
+            _contactTypeService = contactTypeService;
+            _contactGroupService = contactGroupService;
             _mapper = mapper;
+
         }
         [HttpPost]
         [Route("SaveContact")]
@@ -33,7 +38,7 @@ namespace CM.WebAPI.Controllers
             _contactService.Save(mappedData);
             return Ok();
         }
-        [HttpPost]
+        [HttpPut]
         [Route("UpdateContact")]
         public IActionResult UpdateContact(ContactInputModel contactIn)
         {
@@ -53,7 +58,6 @@ namespace CM.WebAPI.Controllers
         }
 
 
-
         [HttpGet]
         [Route("FindById")]
         public IActionResult FindById(long id)
@@ -61,7 +65,7 @@ namespace CM.WebAPI.Controllers
 
             var contact = _contactService.FindById(id);
 
-            var mappedData = _mapper.Map<ContactViewModel>(contact);
+            var mappedData = _mapper.Map<Contact, ContactViewModel>(contact);
             return Ok(mappedData);
 
         }
@@ -75,13 +79,58 @@ namespace CM.WebAPI.Controllers
             var pagedList = _mapper.Map<IPagedList<Contact>, ICustomPagedList<ContactViewModel>>((IPagedList<Contact>)customPagedList);
 
             return Ok(pagedList);
-           
+
+        }
+
+        [HttpGet]
+        [Route("DataSeed")]
+        public IActionResult DataSeed()
+        {
+
+            for (int i = 1; i < 20; i++)
+            {
+                var ContactGroup = new ContactGroup
+                {
+                    Name = "Group" + i,
+                    CreatedDate = DateTime.Now
+
+                };
+                _contactGroupService.Save(ContactGroup);
+
+
+
+                var ContactType = new ContactType
+                {
+                    Name = "Type" + i,
+                    CreatedDate = DateTime.Now
+
+                };
+                _contactTypeService.Save(ContactType);
+
+
+            }
+
+            for (int i = 1; i <= 100; i++)
+            {
+                var contact = new Contact
+                {
+                    Name = "Test" + i,
+                    PhoneNumber = "01925564" + i,
+                    CreatedDate = DateTime.Now,
+                    ContactGroupId = 2,
+                    ContactTypeId = 3
+
+                };
+                _contactService.Save(contact);
+            }
+            return Ok();
+
         }
 
         public override void Dispose()
         {
             _contactService.Dispose();
-            
+
         }
     }
 }

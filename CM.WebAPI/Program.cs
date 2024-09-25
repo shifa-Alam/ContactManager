@@ -16,11 +16,11 @@ namespace CM.WebAPI
             builder.Services.AddScoped<IContactService, ContactService>();
             builder.Services.AddScoped<IContactRepo, ContactRepo>();
 
-            //builder.Services.AddScoped<IContactTypeService, ContactTypeService>();
-            //builder.Services.AddScoped<IContactTypeRepo, ContactTypeRepo>();
+            builder.Services.AddScoped<IContactTypeService, ContactTypeService>();
+            builder.Services.AddScoped<IContactTypeRepo, ContactTypeRepo>();
 
-            //builder.Services.AddScoped<IContactGroupService, ContactGroupService>();
-            //builder.Services.AddScoped<IContactGroupRepo, ContactGroupRepo>();
+            builder.Services.AddScoped<IContactGroupService, ContactGroupService>();
+            builder.Services.AddScoped<IContactGroupRepo, ContactGroupRepo>();
 
 
             builder.Services.AddAutoMapper(typeof(Program).Assembly);

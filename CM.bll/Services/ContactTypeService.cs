@@ -10,22 +10,22 @@ using CM.Core.Services;
 
 namespace CM.bll.Services
 {
-    public class ContactService : BaseService, IContactService
+    public class ContactTypeService : BaseService, IContactTypeService
     {
         private IUow _repo;
 
-        public ContactService(IUow repo)
+        public ContactTypeService(IUow repo)
         {
             _repo = repo;
         }
 
-        public void Save(Contact entity)
+        public void Save(ContactType entity)
         {
             try
             {
                 entity.Active = true;
                 entity.CreatedDate = DateTime.Now;
-                _repo.ContactRepo.Add(entity);
+                _repo.ContactTypeRepo.Add(entity);
                 _repo.Save();
             }
             catch (Exception e)
@@ -33,48 +33,48 @@ namespace CM.bll.Services
                 Console.WriteLine(e);
                 throw;
             }
-           
+
         }
 
-        public void Update(Contact entity)
+        public void Update(ContactType entity)
         {
-            var existingEntity = _repo.ContactRepo.GetById(entity.Id);
+            var existingEntity = _repo.ContactTypeRepo.GetById(entity.Id);
             if (existingEntity != null)
             {
                 existingEntity.Name = entity.Name;
-                existingEntity.PhoneNumber = entity.PhoneNumber;
-                existingEntity.ContactTypeId = entity.ContactTypeId;
                 existingEntity.ModifiedDate = DateTime.Now;
-                _repo.ContactRepo.Update(existingEntity);
+                _repo.ContactTypeRepo.Update(existingEntity);
                 _repo.Save();
             }
         }
 
         public void DeleteById(long id)
         {
-            var entity = _repo.ContactRepo.GetById(id);
-            _repo.ContactRepo.Remove(entity);
+            var entity = _repo.ContactTypeRepo.GetById(id);
+            _repo.ContactTypeRepo.Remove(entity);
             _repo.Save();
         }
 
-        public Contact FindById(long id)
+        public ContactType FindById(long id)
         {
-            return _repo.ContactRepo.GetById(id);
+            return _repo.ContactTypeRepo.GetById(id);
         }
 
-        public IEnumerable<Contact> Get()
+        public IEnumerable<ContactType> Get()
         {
-            return _repo.ContactRepo.GetAll();
+            return _repo.ContactTypeRepo.GetAll();
         }
 
-        public IEnumerable<Contact> GetFilterable(ContactFilterModel filter)
+        public IEnumerable<ContactType> GetFilterable(ContactTypeFilterModel filter)
         {
-            return _repo.ContactRepo.GetFilterable(filter);
+            return _repo.ContactTypeRepo.GetFilterable(filter);
         }
 
         public override void Dispose()
         {
             _repo.Dispose();
         }
+
+
     }
 }

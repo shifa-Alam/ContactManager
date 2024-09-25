@@ -13,8 +13,9 @@ namespace CM.Core.Services
         public void Save(ContactGroup entity);
         public void Update(ContactGroup entity);
         public void DeleteById(long id);
-        public Task<ContactGroup> FindById(long id);
-        public Task<IEnumerable<ContactGroup>> Get();
-       
+        public ContactGroup FindById(long id);
+        public IEnumerable<ContactGroup> Get();
+        public IEnumerable<ContactGroup> GetFilterable(ContactGroupFilterModel filter);
+
     }
 }

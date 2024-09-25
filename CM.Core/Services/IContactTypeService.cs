@@ -1,4 +1,5 @@
 ﻿using CM.Core.Entities;
+using CM.Core.Models.FilterModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,8 @@ namespace CM.Core.Services
         public void Save(ContactType entity);
         public void Update(ContactType entity);
         public void DeleteById(long id);
-        public Task<ContactType> FindById(long id);
-        public Task<IEnumerable<ContactType>> Get();
+        public ContactType FindById(long id);
+        public IEnumerable<ContactType> Get();
+        public IEnumerable<ContactType> GetFilterable(ContactTypeFilterModel filter);
     }
 }

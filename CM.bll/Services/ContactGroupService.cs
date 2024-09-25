@@ -10,22 +10,22 @@ using CM.Core.Services;
 
 namespace CM.bll.Services
 {
-    public class ContactService : BaseService, IContactService
+    public class ContactGroupService : BaseService, IContactGroupService
     {
         private IUow _repo;
 
-        public ContactService(IUow repo)
+        public ContactGroupService(IUow repo)
         {
             _repo = repo;
         }
 
-        public void Save(Contact entity)
+        public void Save(ContactGroup entity)
         {
             try
             {
                 entity.Active = true;
                 entity.CreatedDate = DateTime.Now;
-                _repo.ContactRepo.Add(entity);
+                _repo.ContactGroupRepo.Add(entity);
                 _repo.Save();
             }
             catch (Exception e)
@@ -36,45 +36,46 @@ namespace CM.bll.Services
            
         }
 
-        public void Update(Contact entity)
+        public void Update(ContactGroup entity)
         {
-            var existingEntity = _repo.ContactRepo.GetById(entity.Id);
+            var existingEntity = _repo.ContactGroupRepo.GetById(entity.Id);
             if (existingEntity != null)
             {
                 existingEntity.Name = entity.Name;
-                existingEntity.PhoneNumber = entity.PhoneNumber;
-                existingEntity.ContactTypeId = entity.ContactTypeId;
+           
                 existingEntity.ModifiedDate = DateTime.Now;
-                _repo.ContactRepo.Update(existingEntity);
+                _repo.ContactGroupRepo.Update(existingEntity);
                 _repo.Save();
             }
         }
 
         public void DeleteById(long id)
         {
-            var entity = _repo.ContactRepo.GetById(id);
-            _repo.ContactRepo.Remove(entity);
+            var entity = _repo.ContactGroupRepo.GetById(id);
+            _repo.ContactGroupRepo.Remove(entity);
             _repo.Save();
         }
 
-        public Contact FindById(long id)
+        public ContactGroup FindById(long id)
         {
-            return _repo.ContactRepo.GetById(id);
+            return _repo.ContactGroupRepo.GetById(id);
         }
 
-        public IEnumerable<Contact> Get()
+        public IEnumerable<ContactGroup> Get()
         {
-            return _repo.ContactRepo.GetAll();
+           return _repo.ContactGroupRepo.GetAll();
         }
 
-        public IEnumerable<Contact> GetFilterable(ContactFilterModel filter)
-        {
-            return _repo.ContactRepo.GetFilterable(filter);
-        }
 
+        public IEnumerable<ContactGroup> GetFilterable(ContactGroupFilterModel filter)
+        {
+            return _repo.ContactGroupRepo.GetFilterable(filter);
+        }
         public override void Dispose()
         {
             _repo.Dispose();
         }
+
+       
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CM.Core.Entities;
 using CM.Core.Infra.Repos;
 using CM.Core.Models.FilterModels;
+using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 
 namespace CM.Repo
@@ -18,7 +19,7 @@ namespace CM.Repo
 
         public IEnumerable<Contact> GetFilterable(ContactFilterModel filter)
         {
-            IQueryable<Contact> queryResult = context.Contacts;
+            IQueryable<Contact> queryResult = context.Contacts.Include(c=>c.ContactGroup).Include(c=>c.ContactType);
 
             queryResult = queryResult.Where(e =>
                 (!string.IsNullOrEmpty(filter.Name) ? (e.Name.Contains(filter.Name)) : true)

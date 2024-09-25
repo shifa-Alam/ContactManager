@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using CM.Core.Entities;
 using CM.Core.Infra.Repos;
+using CM.Core.Models.FilterModels;
+using Microsoft.EntityFrameworkCore;
+using X.PagedList;
 
 namespace CM.Repo
 {
@@ -12,6 +15,20 @@ namespace CM.Repo
     {
         public ContactGroupRepo(CMDBContext context) : base(context)
         {
+        }
+
+        public IEnumerable<ContactGroup> GetFilterable(ContactGroupFilterModel filter)
+        {
+            IQueryable<ContactGroup> queryResult = context.ContactGroups;
+
+            queryResult = queryResult.Where(e =>
+                (!string.IsNullOrEmpty(filter.Name) ? (e.Name.Contains(filter.Name)) : true)
+               
+                && e.Active == true);
+
+            var pagedData = queryResult.ToPagedList(filter.PageNumber, filter.PageSize);
+            return pagedData;
+
         }
     }
 }
