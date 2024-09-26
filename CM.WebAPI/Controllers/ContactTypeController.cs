@@ -37,7 +37,7 @@ namespace CM.WebAPI.Controllers
             _contactTypeService.Save(mappedData);
             return Ok();
         }
-        [HttpPut]
+        [HttpPost]
         [Route("UpdateContactType")]
         public IActionResult UpdateContactType(ContactTypeInputModel ContactTypeIn)
         {
