@@ -23,7 +23,7 @@ namespace CM.Repo
         public IContactGroupRepo ContactGroupRepo { get; }
         public IContactTypeRepo ContactTypeRepo { get; }
 
-        public  int Save()
+        public  int SaveChanges()
         {
             return  _context.SaveChanges();
         }

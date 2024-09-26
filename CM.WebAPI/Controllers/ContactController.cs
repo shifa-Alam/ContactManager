@@ -8,11 +8,12 @@ using CM.Core.Models.InputModels;
 using CM.Core.Models.ViewModels;
 using CM.WebAPI.Helpers;
 using X.PagedList;
+using System.Net;
 
 namespace CM.WebAPI.Controllers
 {
     [ApiController]
-    
+
     public class ContactController : BaseController
     {
         private readonly IContactService _contactService;
@@ -32,27 +33,54 @@ namespace CM.WebAPI.Controllers
         [Route("SaveContact")]
         public IActionResult SaveContact(ContactInputModel contactIn)
         {
-            var mappedData = _mapper.Map<Contact>(contactIn);
+            try
+            {
+                if (contactIn == null) throw new ArgumentNullException(nameof(contactIn));
+                var mappedData = _mapper.Map<Contact>(contactIn);
 
-            _contactService.Save(mappedData);
-            return Ok();
+                var data=_contactService.Save(mappedData);
+                return Ok(data);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
 
         }
         [HttpPost]
         [Route("UpdateContact")]
         public IActionResult UpdateContact(ContactInputModel contactIn)
         {
-            var mappedData = _mapper.Map<Contact>(contactIn);
-            _contactService.Update(mappedData);
-            return Ok();
+            try
+            {
+                if (contactIn == null) throw new ArgumentNullException(nameof(contactIn));
+                var mappedData = _mapper.Map<Contact>(contactIn);
+                _contactService.Update(mappedData);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
+           
         }
         [HttpDelete]
         [Route("DeleteContact")]
         public IActionResult DeleteContact(long id)
         {
-            _contactService.DeleteById(id);
+            try
+            {
+                ArgumentOutOfRangeException.ThrowIfZero(id);
+                _contactService.DeleteById(id);
 
-            return Ok();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+           
         }
 
 
@@ -60,27 +88,39 @@ namespace CM.WebAPI.Controllers
         [Route("FindById")]
         public IActionResult FindById(long id)
         {
+            try
+            {
+                ArgumentOutOfRangeException.ThrowIfZero(id);
+                var contact = _contactService.FindById(id);
+                var mappedData = _mapper.Map<Contact, ContactViewModel>(contact);
+                return Ok(mappedData);
+            }
+            
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
 
-            var contact = _contactService.FindById(id);
-
-            var mappedData = _mapper.Map<Contact, ContactViewModel>(contact);
-
-            if (mappedData == null) return NotFound();
-            return Ok(mappedData);
-
-
+            }
         }
 
         [HttpGet]
         [Route("GetContacts")]
         public IActionResult GetContacts([FromQuery] ContactFilterModel filter)
         {
-            var customPagedList = _contactService.GetFilterable(filter);
+           
+            try
+            {
+                if (filter == null) throw new ArgumentNullException(nameof(filter));
+                var customPagedList = _contactService.GetFilterable(filter);
 
-            var pagedList = _mapper.Map<IPagedList<Contact>, ICustomPagedList<ContactViewModel>>((IPagedList<Contact>)customPagedList);
+                var pagedList = _mapper.Map<IPagedList<Contact>, ICustomPagedList<ContactViewModel>>((IPagedList<Contact>)customPagedList);
 
-            return Ok(pagedList);
-
+                return Ok(pagedList);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpGet]

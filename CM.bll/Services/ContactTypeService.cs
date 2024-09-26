@@ -30,7 +30,7 @@ namespace CM.bll.Services
 
                 ApplyValidation(entity);
                 _repo.ContactTypeRepo.Add(entity);
-                _repo.Save();
+                _repo.SaveChanges();
             }
             catch (Exception)
             {
@@ -54,7 +54,7 @@ namespace CM.bll.Services
                     ApplyValidation(existingEntity);
 
                     _repo.ContactTypeRepo.Update(existingEntity);
-                    _repo.Save();
+                    _repo.SaveChanges();
                 }
             }
             catch (Exception)
@@ -72,7 +72,7 @@ namespace CM.bll.Services
                 if (id <= 0) throw new Exception("Id Should greater than zero");
                 var entity = _repo.ContactTypeRepo.GetById(id);
                 _repo.ContactTypeRepo.Remove(entity);
-                _repo.Save();
+                _repo.SaveChanges();
             }
             catch (Exception)
             {

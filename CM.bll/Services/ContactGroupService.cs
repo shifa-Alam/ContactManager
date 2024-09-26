@@ -32,7 +32,7 @@ namespace CM.bll.Services
 
                 ApplyValidation(entity);
                 _repo.ContactGroupRepo.Add(entity);
-                _repo.Save();
+                _repo.SaveChanges();
             }
             catch (Exception e)
             {
@@ -56,7 +56,7 @@ namespace CM.bll.Services
                     existingEntity.ModifiedDate = DateTime.Now;
                     ApplyValidation(existingEntity);
                     _repo.ContactGroupRepo.Update(existingEntity);
-                    _repo.Save();
+                    _repo.SaveChanges();
                 }
             }
             catch (Exception)
@@ -75,7 +75,7 @@ namespace CM.bll.Services
 
                 var entity = _repo.ContactGroupRepo.GetById(id);
                 _repo.ContactGroupRepo.Remove(entity);
-                _repo.Save();
+                _repo.SaveChanges();
             }
             catch (Exception)
             {

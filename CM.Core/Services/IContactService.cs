@@ -11,8 +11,8 @@ namespace CM.Core.Services
 {
     public interface IContactService : IDisposable
     {
-        void Save(Contact entity);
-        void Update(Contact entity);
+        Contact Save(Contact entity);
+        Contact Update(Contact entity);
         void DeleteById(long id);
        Contact FindById(long id);
        IEnumerable<Contact> GetAsync();
