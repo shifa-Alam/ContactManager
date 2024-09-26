@@ -30,6 +30,7 @@ namespace CM.bll.Services
                 entity.CreatedDate = DateTime.Now;
 
                 ApplyValidation(entity);
+
                 _repo.ContactRepo.Add(entity);
                 _repo.Save();
             }
@@ -54,6 +55,7 @@ namespace CM.bll.Services
                     existingEntity.Name = entity.Name;
                     existingEntity.PhoneNumber = entity.PhoneNumber;
                     existingEntity.ContactTypeId = entity.ContactTypeId;
+                    existingEntity.ContactGroupId = entity.ContactGroupId;
                     existingEntity.ModifiedDate = DateTime.Now;
 
                     ApplyValidation(existingEntity);

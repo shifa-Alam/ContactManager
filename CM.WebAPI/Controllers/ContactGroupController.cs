@@ -37,7 +37,7 @@ namespace CM.WebAPI.Controllers
             _contactGroupService.Save(mappedData);
             return Ok();
         }
-        [HttpPut]
+        [HttpPost]
         [Route("UpdateContactGroup")]
         public IActionResult UpdateContactGroup(ContactGroupInputModel ContactGroupIn)
         {

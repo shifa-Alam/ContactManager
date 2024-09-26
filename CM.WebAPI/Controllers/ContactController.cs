@@ -38,7 +38,7 @@ namespace CM.WebAPI.Controllers
             return Ok();
 
         }
-        [HttpPut]
+        [HttpPost]
         [Route("UpdateContact")]
         public IActionResult UpdateContact(ContactInputModel contactIn)
         {

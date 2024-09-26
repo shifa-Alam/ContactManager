@@ -8,7 +8,7 @@ namespace CM.Core.Models.FilterModels
 {
     public class ContactGroupFilterModel : BaseFilter
     {
-        public string Name { get; set; } = "";
+        public string? Name { get; set; }
        
     }
 }
