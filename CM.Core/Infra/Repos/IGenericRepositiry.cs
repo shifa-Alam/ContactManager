@@ -9,8 +9,8 @@ namespace CM.Core.Infra.Repos
 {
     public interface IGenericRepository<T> where T : class
     {
-        T GetById(long id);
-        IEnumerable<T> GetAll();
+       T GetById(long id);
+       IEnumerable<T> GetAll();
         void Add(T entity);
         void AddRange(IEnumerable<T> entities);
         T Update(T entity);

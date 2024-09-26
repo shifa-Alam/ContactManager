@@ -21,16 +21,20 @@ namespace CM.bll.Services
 
         public void Save(ContactType entity)
         {
+
             try
             {
+                if (entity is null) throw new ArgumentNullException(nameof(entity));
                 entity.Active = true;
                 entity.CreatedDate = DateTime.Now;
+
+                ApplyValidation(entity);
                 _repo.ContactTypeRepo.Add(entity);
                 _repo.Save();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e);
+
                 throw;
             }
 
@@ -38,36 +42,95 @@ namespace CM.bll.Services
 
         public void Update(ContactType entity)
         {
-            var existingEntity = _repo.ContactTypeRepo.GetById(entity.Id);
-            if (existingEntity != null)
+            try
             {
-                existingEntity.Name = entity.Name;
-                existingEntity.ModifiedDate = DateTime.Now;
-                _repo.ContactTypeRepo.Update(existingEntity);
-                _repo.Save();
+                if (entity is null) throw new ArgumentNullException(nameof(entity));
+                var existingEntity = _repo.ContactTypeRepo.GetById(entity.Id);
+                if (existingEntity != null)
+                {
+                    existingEntity.Name = entity.Name;
+                    existingEntity.ModifiedDate = DateTime.Now;
+
+                    ApplyValidation(existingEntity);
+
+                    _repo.ContactTypeRepo.Update(existingEntity);
+                    _repo.Save();
+                }
             }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public void DeleteById(long id)
         {
-            var entity = _repo.ContactTypeRepo.GetById(id);
-            _repo.ContactTypeRepo.Remove(entity);
-            _repo.Save();
+            try
+            {
+                if (id <= 0) throw new Exception("Id Should greater than zero");
+                var entity = _repo.ContactTypeRepo.GetById(id);
+                _repo.ContactTypeRepo.Remove(entity);
+                _repo.Save();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public ContactType FindById(long id)
         {
-            return _repo.ContactTypeRepo.GetById(id);
+            try
+            {
+                if (id <= 0) throw new Exception("Id Should greater than zero");
+                return _repo.ContactTypeRepo.GetById(id);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public IEnumerable<ContactType> Get()
         {
-            return _repo.ContactTypeRepo.GetAll();
+            try
+            {
+                return _repo.ContactTypeRepo.GetAll();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public IEnumerable<ContactType> GetFilterable(ContactTypeFilterModel filter)
         {
-            return _repo.ContactTypeRepo.GetFilterable(filter);
+            try
+            {
+                if (filter is null) throw new ArgumentNullException(nameof(filter));
+                return _repo.ContactTypeRepo.GetFilterable(filter);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+        private void ApplyValidation(ContactType entity)
+        {
+            if (entity is null) throw new ArgumentNullException(nameof(entity));
+
+            if (string.IsNullOrEmpty(entity.Name)) throw new Exception("Name is required");
+
         }
 
         public override void Dispose()

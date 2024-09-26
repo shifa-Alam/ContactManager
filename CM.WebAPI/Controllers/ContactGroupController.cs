@@ -65,6 +65,7 @@ namespace CM.WebAPI.Controllers
             var ContactGroup = _contactGroupService.FindById(id);
 
             var mappedData = _mapper.Map<ContactGroup, ContactGroupViewModel>(ContactGroup);
+            if (mappedData == null) return NotFound();
             return Ok(mappedData);
 
         }

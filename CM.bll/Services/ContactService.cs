@@ -21,66 +21,124 @@ namespace CM.bll.Services
 
         public void Save(Contact entity)
         {
+
             try
             {
+                if (entity is null) throw new ArgumentNullException(nameof(entity));
+
                 entity.Active = true;
                 entity.CreatedDate = DateTime.Now;
+
                 ApplyValidation(entity);
                 _repo.ContactRepo.Add(entity);
                 _repo.Save();
             }
             catch (Exception e)
             {
-                throw ;
+                throw;
             }
-           
+
         }
 
-        private void ApplyValidation(Contact entity)
-        {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
-            if (string.IsNullOrEmpty(entity.Name)) throw new Exception("Name is required");
-            if (string.IsNullOrEmpty(entity.PhoneNumber)) throw new Exception("Phone is required");
-            if (entity.ContactGroupId<=0) throw new Exception("Group is required");
-            if (entity.ContactTypeId<=0) throw new Exception("Type is required");
-        }
+
 
         public void Update(Contact entity)
         {
-            var existingEntity = _repo.ContactRepo.GetById(entity.Id);
-            if (existingEntity != null)
+            try
             {
-                existingEntity.Name = entity.Name;
-                existingEntity.PhoneNumber = entity.PhoneNumber;
-                existingEntity.ContactTypeId = entity.ContactTypeId;
-                existingEntity.ModifiedDate = DateTime.Now;
-                _repo.ContactRepo.Update(existingEntity);
-                _repo.Save();
+                if (entity is null) throw new ArgumentNullException(nameof(entity));
+
+                var existingEntity = _repo.ContactRepo.GetById(entity.Id);
+                if (existingEntity != null)
+                {
+                    existingEntity.Name = entity.Name;
+                    existingEntity.PhoneNumber = entity.PhoneNumber;
+                    existingEntity.ContactTypeId = entity.ContactTypeId;
+                    existingEntity.ModifiedDate = DateTime.Now;
+
+                    ApplyValidation(existingEntity);
+                    _repo.ContactRepo.Update(existingEntity);
+                    _repo.Save();
+                }
             }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public void DeleteById(long id)
         {
-            var entity = _repo.ContactRepo.GetById(id);
-            _repo.ContactRepo.Remove(entity);
-            _repo.Save();
+            try
+            {
+                if (id <= 0) throw new Exception("Id Should greater than zero");
+
+                var entity = _repo.ContactRepo.GetById(id);
+                _repo.ContactRepo.Remove(entity);
+                _repo.Save();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
-        public Contact FindById(long id)
+        public  Contact FindById(long id)
         {
-            return _repo.ContactRepo.GetById(id);
+            try
+            {
+                if (id <= 0) throw new Exception("Id Should greater than zero");
+
+                return  _repo.ContactRepo.GetById(id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
 
-        public IEnumerable<Contact> Get()
+        public IEnumerable<Contact> GetAsync()
         {
-            return _repo.ContactRepo.GetAll();
+            try
+            {
+                return _repo.ContactRepo.GetAll();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public IEnumerable<Contact> GetFilterable(ContactFilterModel filter)
         {
-            return _repo.ContactRepo.GetFilterable(filter);
-        }
+            if (filter is null) throw new ArgumentNullException(nameof(filter));
 
+            try
+            {
+                return _repo.ContactRepo.GetFilterable(filter);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+        private void ApplyValidation(Contact entity)
+        {
+            if (entity is null) throw new ArgumentNullException(nameof(entity));
+
+            if (string.IsNullOrEmpty(entity.Name)) throw new Exception("Name is required");
+            if (string.IsNullOrEmpty(entity.PhoneNumber)) throw new Exception("Phone is required");
+            if (entity.ContactGroupId <= 0) throw new Exception("Group is required");
+            if (entity.ContactTypeId <= 0) throw new Exception("Type is required");
+        }
         public override void Dispose()
         {
             _repo.Dispose();

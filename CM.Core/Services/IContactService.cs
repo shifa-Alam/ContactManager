@@ -11,11 +11,11 @@ namespace CM.Core.Services
 {
     public interface IContactService : IDisposable
     {
-        public void Save(Contact entity);
-        public void Update(Contact entity);
-        public void DeleteById(long id);
-        public Contact FindById(long id);
-        public IEnumerable<Contact> Get();
-        public IEnumerable<Contact> GetFilterable(ContactFilterModel filter);
+        void Save(Contact entity);
+        void Update(Contact entity);
+        void DeleteById(long id);
+       Contact FindById(long id);
+       IEnumerable<Contact> GetAsync();
+        IEnumerable<Contact> GetFilterable(ContactFilterModel filter);
     }
 }

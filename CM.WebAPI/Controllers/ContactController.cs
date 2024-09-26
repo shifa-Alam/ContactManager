@@ -32,19 +32,11 @@ namespace CM.WebAPI.Controllers
         [Route("SaveContact")]
         public IActionResult SaveContact(ContactInputModel contactIn)
         {
-            try
-            {
-                var mappedData = _mapper.Map<Contact>(contactIn);
+            var mappedData = _mapper.Map<Contact>(contactIn);
 
-                _contactService.Save(mappedData);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-           
+            _contactService.Save(mappedData);
+            return Ok();
+
         }
         [HttpPut]
         [Route("UpdateContact")]
@@ -72,7 +64,10 @@ namespace CM.WebAPI.Controllers
             var contact = _contactService.FindById(id);
 
             var mappedData = _mapper.Map<Contact, ContactViewModel>(contact);
+
+            if (mappedData == null) return NotFound();
             return Ok(mappedData);
+
 
         }
 

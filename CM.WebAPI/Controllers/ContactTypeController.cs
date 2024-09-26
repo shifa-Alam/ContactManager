@@ -65,6 +65,7 @@ namespace CM.WebAPI.Controllers
             var ContactType = _contactTypeService.FindById(id);
 
             var mappedData = _mapper.Map<ContactType, ContactTypeViewModel>(ContactType);
+            if (mappedData == null) return NotFound();
             return Ok(mappedData);
 
         }
