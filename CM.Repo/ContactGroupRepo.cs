@@ -17,6 +17,16 @@ namespace CM.Repo
         {
         }
 
+        public ContactGroup FindByName(string name)
+        {
+            return context.ContactGroups.FirstOrDefault(e => e.Name.Equals(name));
+        }
+
+        public ContactGroup FindByNameExceptMe(long id, string name)
+        {
+            return context.ContactGroups.FirstOrDefault(e => e.Id != id && e.Name.Equals(name));
+        }
+
         public IEnumerable<ContactGroup> GetFilterable(ContactGroupFilterModel filter)
         {
             IQueryable<ContactGroup> queryResult = context.ContactGroups;

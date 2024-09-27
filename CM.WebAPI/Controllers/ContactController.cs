@@ -12,8 +12,7 @@ using System.Net;
 
 namespace CM.WebAPI.Controllers
 {
-    [ApiController]
-
+    
     public class ContactController : BaseController
     {
         private readonly IContactService _contactService;
@@ -21,7 +20,10 @@ namespace CM.WebAPI.Controllers
         private readonly IContactGroupService _contactGroupService;
         private readonly IMapper _mapper;
 
-        public ContactController(IContactService contactService, IContactTypeService contactTypeService, IContactGroupService contactGroupService, IMapper mapper)
+        public ContactController(IContactService contactService,
+            IContactTypeService contactTypeService,
+            IContactGroupService contactGroupService,
+            IMapper mapper)
         {
             _contactService = contactService;
             _contactTypeService = contactTypeService;
@@ -38,7 +40,7 @@ namespace CM.WebAPI.Controllers
                 if (contactIn == null) throw new ArgumentNullException(nameof(contactIn));
                 var mappedData = _mapper.Map<Contact>(contactIn);
 
-                var data=_contactService.Save(mappedData);
+                var data = _contactService.Save(mappedData);
                 return Ok(data);
             }
             catch (Exception e)
@@ -63,7 +65,7 @@ namespace CM.WebAPI.Controllers
 
                 return BadRequest(e.Message);
             }
-           
+
         }
         [HttpDelete]
         [Route("DeleteContact")]
@@ -71,7 +73,7 @@ namespace CM.WebAPI.Controllers
         {
             try
             {
-                ArgumentOutOfRangeException.ThrowIfZero(id);
+                ArgumentOutOfRangeException.ThrowIfNegativeOrZero(id);
                 _contactService.DeleteById(id);
 
                 return Ok();
@@ -80,7 +82,7 @@ namespace CM.WebAPI.Controllers
             {
                 return BadRequest(e.Message);
             }
-           
+
         }
 
 
@@ -90,12 +92,12 @@ namespace CM.WebAPI.Controllers
         {
             try
             {
-                ArgumentOutOfRangeException.ThrowIfZero(id);
+                ArgumentOutOfRangeException.ThrowIfNegativeOrZero(id);
                 var contact = _contactService.FindById(id);
                 var mappedData = _mapper.Map<Contact, ContactViewModel>(contact);
                 return Ok(mappedData);
             }
-            
+
             catch (Exception e)
             {
                 return BadRequest(e.Message);
@@ -107,7 +109,7 @@ namespace CM.WebAPI.Controllers
         [Route("GetContacts")]
         public IActionResult GetContacts([FromQuery] ContactFilterModel filter)
         {
-           
+
             try
             {
                 if (filter == null) throw new ArgumentNullException(nameof(filter));

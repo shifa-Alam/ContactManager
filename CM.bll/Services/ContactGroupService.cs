@@ -12,137 +12,102 @@ namespace CM.bll.Services
 {
     public class ContactGroupService : BaseService, IContactGroupService
     {
-        private IUow _repo;
+        protected IUow Repo;
 
         public ContactGroupService(IUow repo)
         {
-            _repo = repo;
+            Repo = repo;
         }
 
-        public void Save(ContactGroup entity)
+        public ContactGroup Save(ContactGroup entity)
         {
+            if (entity is null) throw new ArgumentNullException(nameof(entity));
 
+            entity.Active = true;
+            entity.CreatedDate = DateTime.Now;
 
-            try
-            {
-                if (entity is null) throw new ArgumentNullException(nameof(entity));
+            ApplyValidation(entity);
+            var duplicateEntity = Repo.ContactGroupRepo.FindByName(entity.Name);
+            ApplyDuplicateBl(duplicateEntity);
 
-                entity.Active = true;
-                entity.CreatedDate = DateTime.Now;
-
-                ApplyValidation(entity);
-                _repo.ContactGroupRepo.Add(entity);
-                _repo.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-
+            Repo.ContactGroupRepo.Add(entity);
+            if (Repo.SaveChanges() <= 0) throw new Exception("Error In save");
+            return entity;
         }
 
-        public void Update(ContactGroup entity)
+        public ContactGroup Update(ContactGroup entity)
         {
-            try
-            {
-                if (entity is null) throw new ArgumentNullException(nameof(entity));
-                var existingEntity = _repo.ContactGroupRepo.GetById(entity.Id);
+            if (entity is null) throw new ArgumentNullException(nameof(entity));
+            var existingEntity = Repo.ContactGroupRepo.GetById(entity.Id);
+            if (existingEntity == null) throw new Exception("Data Not found");
 
-                if (existingEntity != null)
-                {
-                    existingEntity.Name = entity.Name;
+            existingEntity.Name = entity.Name;
+            existingEntity.ModifiedDate = DateTime.Now;
 
-                    existingEntity.ModifiedDate = DateTime.Now;
-                    ApplyValidation(existingEntity);
-                    _repo.ContactGroupRepo.Update(existingEntity);
-                    _repo.SaveChanges();
-                }
-            }
-            catch (Exception)
-            {
+            ApplyValidation(existingEntity);
+            var duplicateEntity = Repo.ContactGroupRepo.FindByNameExceptMe(existingEntity.Id, existingEntity.Name);
+            ApplyDuplicateBl(duplicateEntity);
 
-                throw;
-            }
+            Repo.ContactGroupRepo.Update(existingEntity);
+
+            if (Repo.SaveChanges() <= 0) throw new Exception("Error In Update");
+
+            return existingEntity;
 
         }
 
         public void DeleteById(long id)
         {
-            try
-            {
-                if (id <= 0) throw new Exception("Id Should greater than zero");
+            if (id <= 0) throw new Exception("Id Should greater than zero");
 
-                var entity = _repo.ContactGroupRepo.GetById(id);
-                _repo.ContactGroupRepo.Remove(entity);
-                _repo.SaveChanges();
-            }
-            catch (Exception)
-            {
+            var existingEntity = Repo.ContactGroupRepo.GetById(id);
+            if (existingEntity == null) throw new Exception("Data Not found");
 
-                throw;
-            }
+            Repo.ContactGroupRepo.Remove(existingEntity);
 
+            if (Repo.SaveChanges() <= 0) throw new Exception("Error In Delete");
         }
 
         public ContactGroup FindById(long id)
         {
-            try
-            {
-                if (id <= 0) throw new Exception("Id Should greater than zero");
-                return _repo.ContactGroupRepo.GetById(id);
-            }
-            catch (Exception)
-            {
+            if (id <= 0) throw new Exception("Id Should greater than zero");
+            var existingEntity = Repo.ContactGroupRepo.GetById(id);
 
-                throw;
-            }
+            if (existingEntity == null) throw new Exception("Data Not found");
 
+            return existingEntity;
         }
 
         public IEnumerable<ContactGroup> Get()
         {
-            try
-            {
-                return _repo.ContactGroupRepo.GetAll();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
+            return Repo.ContactGroupRepo.GetAll();
         }
 
 
         public IEnumerable<ContactGroup> GetFilterable(ContactGroupFilterModel filter)
         {
+            if (filter is null) throw new ArgumentNullException(nameof(filter));
 
-            try
-            {
-                if (filter is null) throw new ArgumentNullException(nameof(filter));
-
-                return _repo.ContactGroupRepo.GetFilterable(filter);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
+            return Repo.ContactGroupRepo.GetFilterable(filter);
         }
+
+        public override void Dispose()
+        {
+            Repo.Dispose();
+        }
+
+
         private void ApplyValidation(ContactGroup entity)
         {
             if (entity is null) throw new ArgumentNullException(nameof(entity));
 
             if (string.IsNullOrEmpty(entity.Name)) throw new Exception("Name is required");
-            
-        }
-        public override void Dispose()
-        {
-            _repo.Dispose();
-        }
 
+        }
+        private void ApplyDuplicateBl(ContactGroup entity)
+        {
+            if (entity != null) throw new Exception("Data already Exist");
+        }
 
     }
 }

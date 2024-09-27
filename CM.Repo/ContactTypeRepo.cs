@@ -17,6 +17,18 @@ namespace CM.Repo
         {
         }
 
+        public ContactType FindByName(string name)
+        {
+            return context.ContactTypes.FirstOrDefault(e => e.Name.Equals(name));
+        }
+
+
+        public ContactType FindByNameExceptMe(long id, string name)
+        {
+            return context.ContactTypes.FirstOrDefault(e => e.Id != id && e.Name.Equals(name));
+        }
+
+
         public IEnumerable<ContactType> GetFilterable(ContactTypeFilterModel filter)
         {
             IQueryable<ContactType> queryResult = context.ContactTypes;

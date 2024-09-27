@@ -12,48 +12,71 @@ using CM.bll.Services;
 
 namespace CM.WebAPI.Controllers
 {
-    [ApiController]
     
     public class ContactTypeController : BaseController
     {
-        
+
         private readonly IContactTypeService _contactTypeService;
         private readonly IMapper _mapper;
 
-        public ContactTypeController( IContactTypeService ContactTypeService, IMapper mapper)
+        public ContactTypeController(IContactTypeService contactTypeService, IMapper mapper)
         {
-           
-            _contactTypeService = ContactTypeService;
+
+            _contactTypeService = contactTypeService;
             _mapper = mapper;
 
         }
         [HttpPost]
         [Route("SaveContactType")]
-        public IActionResult SaveContactType(ContactTypeInputModel ContactTypeIn)
+        public IActionResult SaveContactType(ContactTypeInputModel contactTypeIn)
         {
+            try
+            {
+                if (contactTypeIn == null) throw new ArgumentNullException(nameof(contactTypeIn));
 
-            var mappedData = _mapper.Map<ContactType>(ContactTypeIn);
+                var mappedData = _mapper.Map<ContactType>(contactTypeIn);
 
-            _contactTypeService.Save(mappedData);
-            return Ok();
+                var data = _contactTypeService.Save(mappedData);
+                return Ok(data);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         [HttpPost]
         [Route("UpdateContactType")]
-        public IActionResult UpdateContactType(ContactTypeInputModel ContactTypeIn)
+        public IActionResult UpdateContactType(ContactTypeInputModel contactTypeIn)
         {
+            try
+            {
+                if (contactTypeIn == null) throw new ArgumentNullException(nameof(contactTypeIn));
 
-            var mappedData = _mapper.Map<ContactType>(ContactTypeIn);
+                var mappedData = _mapper.Map<ContactType>(contactTypeIn);
 
-            _contactTypeService.Update(mappedData);
-            return Ok();
+                var data = _contactTypeService.Update(mappedData);
+                return Ok(data);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         [HttpDelete]
         [Route("DeleteContactType")]
         public IActionResult DeleteContactType(long id)
         {
-            _contactTypeService.DeleteById(id);
+            try
+            {
+                ArgumentOutOfRangeException.ThrowIfNegativeOrZero(id);
+                _contactTypeService.DeleteById(id);
 
-            return Ok();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
 
@@ -61,12 +84,19 @@ namespace CM.WebAPI.Controllers
         [Route("FindById")]
         public IActionResult FindById(long id)
         {
+            try
+            {
+                ArgumentOutOfRangeException.ThrowIfNegativeOrZero(id);
 
-            var ContactType = _contactTypeService.FindById(id);
+                var ContactType = _contactTypeService.FindById(id);
 
-            var mappedData = _mapper.Map<ContactType, ContactTypeViewModel>(ContactType);
-            if (mappedData == null) return NotFound();
-            return Ok(mappedData);
+                var mappedData = _mapper.Map<ContactType, ContactTypeViewModel>(ContactType);
+                return Ok(mappedData);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
 
         }
         [HttpGet]
@@ -74,22 +104,37 @@ namespace CM.WebAPI.Controllers
         public IActionResult GetAll()
         {
 
-            var all = _contactTypeService.Get();
+            try
+            {
+                var all = _contactTypeService.Get();
 
-            var result =_mapper.Map<IList<ContactType>, IList<ContactTypeViewModel>>((IList<ContactType>)all);
+                var result = _mapper.Map<IList<ContactType>, IList<ContactTypeViewModel>>((IList<ContactType>)all);
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
 
         }
         [HttpGet]
         [Route("GetContactTypes")]
         public IActionResult GetContacts([FromQuery] ContactTypeFilterModel filter)
         {
-            var customPagedList = _contactTypeService.GetFilterable(filter);
+            try
+            {
+                if (filter == null) throw new ArgumentNullException(nameof(filter));
+                var customPagedList = _contactTypeService.GetFilterable(filter);
 
-            var pagedList = _mapper.Map<IPagedList<ContactType>, ICustomPagedList<ContactTypeViewModel>>((IPagedList<ContactType>)customPagedList);
+                var pagedList = _mapper.Map<IPagedList<ContactType>, ICustomPagedList<ContactTypeViewModel>>((IPagedList<ContactType>)customPagedList);
 
-            return Ok(pagedList);
+                return Ok(pagedList);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
 
         }
 

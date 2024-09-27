@@ -10,8 +10,8 @@ namespace CM.Core.Services
 {
     public interface IContactTypeService:IDisposable
     {
-        public void Save(ContactType entity);
-        public void Update(ContactType entity);
+        public ContactType Save(ContactType entity);
+        public ContactType Update(ContactType entity);
         public void DeleteById(long id);
         public ContactType FindById(long id);
         public IEnumerable<ContactType> Get();

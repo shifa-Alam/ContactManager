@@ -10,6 +10,8 @@ namespace CM.Core.Infra.Repos
 {
     public interface IContactTypeRepo : IGenericRepository<ContactType>
     {
+        ContactType FindByName(string name);
+        ContactType FindByNameExceptMe(long id, string name);
         IEnumerable<ContactType> GetFilterable(ContactTypeFilterModel filter);  
     }
 }

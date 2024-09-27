@@ -10,6 +10,8 @@ namespace CM.Core.Infra.Repos
 {
     public interface IContactGroupRepo : IGenericRepository<ContactGroup>
     {
+        ContactGroup FindByName(string name);
+        ContactGroup FindByNameExceptMe(long id, string name);
         IEnumerable<ContactGroup> GetFilterable(ContactGroupFilterModel filter);
     }
 }
